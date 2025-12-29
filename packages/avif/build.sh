@@ -68,6 +68,9 @@ test -n "$SKIP_LIBAVIF" || (
   emcmake cmake $LIBAVIF_SRC \
     -G "Unix Makefiles" \
     -DCMAKE_TOOLCHAIN_FILE=$CMAKE_TOOLCHAIN_FILE \
+    -DCMAKE_C_STANDARD=99 \
+    -DCMAKE_CXX_STANDARD=17 \
+    -DCMAKE_C_FLAGS="-Wno-error=declaration-after-statement -Wno-error=implicit-void-ptr-cast -Wno-error=unsafe-buffer-usage -Wno-error=strict-prototypes -Wno-error=switch-default -Wno-error=implicit-int-enum-cast" \
     -DAVIF_CODEC_AOM=1 \
     -DAVIF_LOCAL_AOM=1 
   emmake make -j$(nproc)
@@ -80,15 +83,13 @@ echo ""
 echo "======="
 (
   time emcc \
-    --llvm-lto 3 \
-    --llvm-opts 3 \
     --bind \
     ${OPTIMIZE} \
     -s ALLOW_MEMORY_GROWTH=1 \
     -s MODULARIZE=1 \
     -s 'EXPORT_NAME="wasm_avif"' \
     -I node_modules/libavif/include \
-    --std=c++11 \
+    --std=c++17 \
     -o ./wasm_avif.js \
     -x c++ \
     main.cpp \

@@ -12,6 +12,7 @@
     "access": "public"
   },
   "scripts": {
+    "setup": "node setup.js",
     "install": "lerna bootstrap",
     "build": "lerna exec yarn build",
     "lint": "eslint packages/ --ext .ts",
